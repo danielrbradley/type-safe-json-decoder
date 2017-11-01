@@ -507,6 +507,7 @@ export function intersect(...decoders: Decoder<any>[]) {
         result[key] = partial[key]
       })
     }
+    return result
   })
 }
 

@@ -518,6 +518,22 @@ describe('union', () => {
   })
 })
 
+describe('intersection', () => {
+  describe('decoding an intersection of string properties', () => {
+    type PartA = { propA: string }
+    type PartB = { propB: string }
+    type Parts = PartA & PartB
+    const decoder: module.Decoder<Parts> = module.intersect(
+      module.object(["propA", module.string()], (propA): PartA => ({ propA })),
+      module.object(["propB", module.string()], (propB): PartB => ({ propB }))
+    )
+
+    it('can decode valid object', () => {
+      expect(decoder.decodeJSON(`{"propA":"foo","propB":"bar"}`)).toEqual({ propA: 'foo', propB: 'bar' })
+    })
+  })
+})
+
 describe('lazy', () => {
   describe('decoding a primitive data type', () => {
     const decoder = module.lazy(() => module.string())
