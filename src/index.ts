@@ -478,6 +478,39 @@ export function union (...decoders: Decoder<any>[]): Decoder<any> {
 }
 
 /**
+ * Decode a intersection type. Given multiple decoders whose result type is a member
+ * of the intersection, execute each one in order and intersect the fields into a single type.
+ * @param ad A decoder for a member of the intersection.
+ * @param bd A decoder for another member of the intersection.
+ * @returns A decoder or throws an Error of any decoder fails.
+ */
+
+export function intersect <A, B>(ad: Decoder<A>, bd: Decoder<B>): Decoder<A & B>
+export function intersect <A, B, C>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>): Decoder<A & B & C>
+export function intersect <A, B, C, D>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>): Decoder<A & B & C & D>
+export function intersect <A, B, C, D, E>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>): Decoder<A & B & C & D & E>
+export function intersect <A, B, C, D, E, F>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>): Decoder<A & B & C & D & E & F>
+export function intersect <A, B, C, D, E, F, G>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>): Decoder<A & B & C & D & E & F & G>
+export function intersect <A, B, C, D, E, F, G, H>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>, hd: Decoder<H>): Decoder<A & B & C & D & E & F & G & H>
+export function intersect <A, B, C, D, E, F, G, H, I>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>, hd: Decoder<H>, id: Decoder<I>): Decoder<A & B & C & D & E & F & G & H & I>
+export function intersect <A, B, C, D, E, F, G, H, I, J>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>, hd: Decoder<H>, id: Decoder<I>, jd: Decoder<J>): Decoder<A & B & C & D & E & F & G & H & I & J>
+export function intersect <A, B, C, D, E, F, G, H, I, J, K>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>, hd: Decoder<H>, id: Decoder<I>, jd: Decoder<J>, kd: Decoder<K>): Decoder<A & B & C & D & E & F & G & H & I & J & K>
+export function intersect <A, B, C, D, E, F, G, H, I, J, K, L>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>, hd: Decoder<H>, id: Decoder<I>, jd: Decoder<J>, kd: Decoder<K>, ld: Decoder<L>): Decoder<A & B & C & D & E & F & G & H & I & J & K & L>
+export function intersect <A, B, C, D, E, F, G, H, I, J, K, L, M>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>, hd: Decoder<H>, id: Decoder<I>, jd: Decoder<J>, kd: Decoder<K>, ld: Decoder<L>, md: Decoder<M>): Decoder<A & B & C & D & E & F & G & H & I & J & K & L & M>
+export function intersect <A, B, C, D, E, F, G, H, I, J, K, L, M, N>(ad: Decoder<A>, bd: Decoder<B>, cd: Decoder<C>, dd: Decoder<D>, ed: Decoder<E>, fd: Decoder<F>, gd: Decoder<G>, hd: Decoder<H>, id: Decoder<I>, jd: Decoder<J>, kd: Decoder<K>, ld: Decoder<L>, md: Decoder<M>, nd: Decoder<N>): Decoder<A & B & C & D & E & F & G & H & I & J & K & L & M & N>
+export function intersect(...decoders: Decoder<any>[]) {
+  return createDecoder((obj, at) => {
+    const result: any = {};
+    for(const decoder of decoders) {
+      const partial = decode(decoder, obj, at)
+      Object.keys(partial).forEach((key) => {
+        result[key] = partial[key]
+      })
+    }
+  })
+}
+
+/**
  * Decode a value with the decoder returned by the given function. This is
  * useful if you need to decode a recursive data structure. TypeScript does not
  * allow the direct use of variables within their definition:
