@@ -531,6 +531,12 @@ describe('intersection', () => {
     it('can decode valid object', () => {
       expect(decoder.decodeJSON(`{"propA":"foo","propB":"bar"}`)).toEqual({ propA: 'foo', propB: 'bar' })
     })
+    
+    it('fails to decode if field missing', () => {
+      expect(() => decoder.decodeJSON(`{"propA":"foo"}`)).toThrowError(
+        `error at root: expected object with keys: propB`
+      )
+    })
   })
 })
 
